@@ -14,7 +14,6 @@ import type {
   CheckGuessResp,
   CantonLite,
   ClaimNickResp,
-  Leaderboards,
   LBRow,
 } from "./lib/api";
 
