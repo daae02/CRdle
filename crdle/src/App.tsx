@@ -362,7 +362,7 @@ function GuessRow({ g }: { g: CheckGuessResp }) {
     <TileQuant key="altitud" label="Altitud" status={g.quant.altitud_msnm.status} arrow={g.quant.altitud_msnm.arrow} value={g.quant.altitud_msnm.guess_value} />,
     <TileQuant key="poblacion" label="Poblacion" status={g.quant.poblacion_2022.status} arrow={g.quant.poblacion_2022.arrow} value={g.quant.poblacion_2022.guess_value} />,
     <TileQuant key="idh" label="IDH" status={g.quant.idh_2020.status} arrow={g.quant.idh_2020.arrow} value={g.quant.idh_2020.guess_value} />,
-    <TileColors key="colores" label="Colores" status={g.colors.status} text={g.colors.common.join(", ")} />,
+    <TileColors key="bandera" label="Bandera" status={g.colors.status} text={g.colors.common.join(", ")} />,
   ];
 
   return (
@@ -450,6 +450,8 @@ const suggestBox: CSSProperties = {
   borderRadius: 10,
   overflow: "hidden",
   background: "rgba(24,24,24,0.85)",
+  maxHeight: 5 * 44, // 5 items approx (44px each incl. borders/padding)
+  overflowY: "auto",
 };
 
 const suggestItem: CSSProperties = {
