@@ -30,6 +30,17 @@ jobs:
           cache: npm
           cache-dependency-path: crdle/package-lock.json
 
+      - name: Create .env from secrets
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+        run: |
+          cd crdle
+          cat <<'EOF' > .env
+          VITE_SUPABASE_URL=${VITE_SUPABASE_URL}
+          VITE_SUPABASE_ANON_KEY=${VITE_SUPABASE_ANON_KEY}
+          EOF
+
       - name: Install
         run: npm ci
 
