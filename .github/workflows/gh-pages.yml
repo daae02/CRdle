@@ -40,9 +40,9 @@ jobs:
             exit 1
           fi
           cat <<EOF > .env
-VITE_SUPABASE_URL=${VITE_SUPABASE_URL}
-VITE_SUPABASE_ANON_KEY=${VITE_SUPABASE_ANON_KEY}
-EOF
+          VITE_SUPABASE_URL=${VITE_SUPABASE_URL}
+          VITE_SUPABASE_ANON_KEY=${VITE_SUPABASE_ANON_KEY}
+          EOF
 
       - name: Install
         run: npm ci
