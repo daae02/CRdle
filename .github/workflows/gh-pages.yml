@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [main]
+    branches: [master]
 
 permissions:
   contents: read
@@ -16,6 +16,9 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: crdle
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -25,6 +28,7 @@ jobs:
         with:
           node-version: 20
           cache: npm
+          cache-dependency-path: crdle/package-lock.json
 
       - name: Install
         run: npm ci
@@ -35,7 +39,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: dist
+          path: crdle/dist
 
   deploy:
     needs: build
