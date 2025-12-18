@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react'
 
 // https://vite.dev/config/
 export default defineConfig({
-  // necesario para GitHub Pages (usa el nombre exacto del repo en minúsculas)
-  base: '/crdle/',
+  // necesario para GitHub Pages (usa el nombre exacto del repo con mayúsculas)
+  base: '/CRdle/',
   plugins: [react()],
 })
