@@ -173,7 +173,7 @@ export default function App() {
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundAttachment: "fixed",
-        padding: 16,
+        padding: 12,
         fontFamily: "system-ui",
       }}
     >
@@ -244,17 +244,17 @@ export default function App() {
         </div>
       ) : null}
 
-      <div style={{ maxWidth: 980, margin: "0 auto" }}>
-        <div style={{ ...card, display: "inline-block", padding: "12px 16px", marginBottom: 12 }}>
-          <h1 style={{ margin: 0, color: "#f8f8f8" }}>CRdle</h1>
-          <div style={{ opacity: 0.92, color: "#eaeaea" }}>Fecha: {today?.puzzle_date ?? "..."}</div>
+      <div style={{ maxWidth: 1024, margin: "0 auto" }}>
+        <div style={{ ...card, display: "inline-block", padding: "12px 16px", marginBottom: 12, maxWidth: "100%" }}>
+          <h1 style={{ margin: 0, color: "#f8f8f8", fontSize: 26 }}>CRdle</h1>
+          <div style={{ opacity: 0.92, color: "#eaeaea", fontSize: 14 }}>Fecha: {today?.puzzle_date ?? "..."}</div>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: 16 }}>
-          <section style={card}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: 12 }}>
+          <section style={{ ...card, padding: "14px 14px 16px" }}>
             <h2 style={{ marginTop: 0, marginBottom: 12, color: "#f8f8f8" }}>Jugar</h2>
 
-            <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+            <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
               <input
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
@@ -265,7 +265,7 @@ export default function App() {
                   }
                 }}
                 placeholder="Escribí un cantón... ej: Atenas"
-                style={{ ...input, flex: 1 }}
+                style={{ ...input, flex: 1, minWidth: 220 }}
                 disabled={blocked || submitting}
               />
               <button type="button" onClick={() => onGuess(firstSuggestion)} style={button} disabled={blocked || submitting}>
@@ -466,7 +466,7 @@ const suggestItem: CSSProperties = {
 
 const grid7: CSSProperties = {
   display: "grid",
-  gridTemplateColumns: "repeat(7, minmax(0, 1fr))",
+  gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))",
   gap: 10,
 };
 
