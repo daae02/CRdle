@@ -29,6 +29,7 @@ export default function App() {
   const [won, setWon] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [countdown, setCountdown] = useState<string | null>(null);
 
   const [cantons, setCantons] = useState<CantonLite[]>([]);
   const [query, setQuery] = useState("");
@@ -62,6 +63,22 @@ export default function App() {
       }
     })();
   }, []);
+
+  useEffect(() => {
+    if (!blocked) {
+      setCountdown(null);
+      return;
+    }
+
+    const update = () => {
+      const ms = msUntilMidnightUtcMinus6();
+      setCountdown(formatCountdown(ms));
+    };
+
+    update();
+    const id = setInterval(update, 1000);
+    return () => clearInterval(id);
+  }, [blocked]);
 
   const usedIds = useMemo(() => new Set(history.map((h) => h.guess.canton_id)), [history]);
 
@@ -293,6 +310,7 @@ export default function App() {
             {blocked ? (
               <div style={{ marginTop: 10, padding: 10, borderRadius: 8, background: "rgba(255,255,255,0.08)", color: "#f0f0f0" }}>
                 {won ? "¡Ya ganaste hoy! 🎉" : "Ya jugaste hoy."}
+                {countdown ? <div style={{ marginTop: 6, fontSize: 13, opacity: 0.95 }}>Proximo reset en {countdown} (medianoche UTC-6)</div> : null}
               </div>
             ) : null}
 
@@ -352,6 +370,22 @@ function formatMs(ms: number | null) {
   const m = Math.floor(s / 60);
   const ss = String(s % 60).padStart(2, "0");
   return m > 0 ? `${m}:${ss}` : `${s}s`;
+}
+
+function msUntilMidnightUtcMinus6() {
+  const offsetMs = 6 * 60 * 60 * 1000;
+  const now = Date.now();
+  const localNow = new Date(now - offsetMs);
+  const midnightUtcMs = Date.UTC(localNow.getUTCFullYear(), localNow.getUTCMonth(), localNow.getUTCDate() + 1, 0, 0, 0) + offsetMs;
+  return Math.max(0, midnightUtcMs - now);
+}
+
+function formatCountdown(ms: number) {
+  const totalSeconds = Math.floor(ms / 1000);
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
 }
 
 function GuessRow({ g }: { g: CheckGuessResp }) {
