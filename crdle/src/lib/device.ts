@@ -19,13 +19,16 @@ function uuidv4() {
 function readCookie(name: string) {
   if (typeof document === "undefined") return null;
   const m = document.cookie.match(new RegExp(`(?:^|; )${name}=([^;]*)`));
-  return m ? decodeURIComponent(m[1]) : null;
+  const value = m ? decodeURIComponent(m[1]) : null;
+  console.debug("[device] readCookie", { name, value });
+  return value;
 }
 
 function writeCookie(name: string, value: string) {
   if (typeof document === "undefined") return;
-  // 400 dias ~ 1.1 años
+  // 400 dias ~ 1.1 a?os
   const expires = new Date(Date.now() + 1000 * 60 * 60 * 24 * 400).toUTCString();
+  console.debug("[device] writeCookie", { name, value, expires });
   document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/; SameSite=Lax`;
 }
 
@@ -36,19 +39,23 @@ export function getDeviceId() {
   try {
     const stored = localStorage.getItem(KEY);
     if (stored) {
+      console.debug("[device] found in localStorage", stored);
       cachedId = stored;
       return cachedId;
     }
+    console.debug("[device] not found in localStorage");
   } catch {
     // ignore
   }
 
-  // 2) cookie fallback (por si localStorage falla o está bloqueado)
+  // 2) cookie fallback (por si localStorage falla o est? bloqueado)
   const fromCookie = readCookie(KEY);
   if (fromCookie) {
+    console.debug("[device] found in cookie", fromCookie);
     cachedId = fromCookie;
     try {
       localStorage.setItem(KEY, cachedId);
+      console.debug("[device] persisted cookie value into localStorage");
     } catch {
       // ignore
     }
@@ -57,12 +64,15 @@ export function getDeviceId() {
 
   // 3) generar uno y persistir en ambos si es posible
   const id = uuidv4();
+  console.debug("[device] generated new id", id);
   cachedId = id;
   try {
     localStorage.setItem(KEY, id);
+    console.debug("[device] saved id to localStorage");
   } catch {
     // ignore
   }
   writeCookie(KEY, id);
+  console.debug("[device] saved id to cookie");
   return cachedId;
 }
